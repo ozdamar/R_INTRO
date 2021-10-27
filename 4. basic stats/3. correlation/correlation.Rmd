@@ -1,0 +1,235 @@
+---
+title: "Correlation"
+author: "ozge.ozdamar@msgsu.edu.tr"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output:
+  html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+<img src="msgsulogo.png" style="position:absolute;top:0px;right:0px;" />
+
+
+***
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MSGSU ISTATISTIK BOLUMU - R ILE ISTATISTIKSEL PROGRAMLAMA DERS NOTLARI 2021</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ozge.ozdamar@msgsu.edu.tr</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+
+***
+
+**REFERENCES**
+
+
+***
+
+**LIBRARIES**
+```{r,eval=FALSE}
+rm(list=ls())
+.packages = c("corrplot","PerformanceAnalytics","corrgram","plotrix", "Hmisc","gclus","polycor","psych", "corr")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+```
+
+**FUNCTIONS**
+```{r,eval=FALSE}
+stats::cor(), cor.test(), cov(), symnum()
+corrplot::corrplot()
+PerformanceAnaltics::
+corrgram::corrgram()
+plotrix::
+Hmisc::rcorr()
+gclus::
+```
+
+**data**
+```{r}
+head(mtcars)
+```
+
+***
+# Correlation - covariance  
+
+Pearson correlation (r): measures a linear dependence between two variables. It is also known as a parametric correlation test because it depends to the distribution of the data. It can be used only when x and y are from normal distribution.
+
+Kendall  tau and Spearman rho, which are rank-based correlation coefficients
+(non-parametric)
+
+```{r,eval=FALSE}
+cor(x, y, method = c("pearson", "kendall", "spearman"))
+cor.test(x, y, method=c("pearson", "kendall", "spearman"))
+cov(mtcars, use="complete.obs") # korelasyon
+```
+```{r}
+cor(mtcars$mpg,mtcars$disp)
+```
+
+```{r,eval=FALSE}
+cor(mtcars$mpg,mtcars$disp,mtcars$hp) #! invalid
+```
+
+```{r}
+cor(mtcars[,c(1,3,4)])
+```
+
+```{r}
+cor(mtcars)
+```
+
+```{r}
+cor(mtcars[,c(2,10)],method = "spearman")
+```
+
+
+covariance
+```{r}
+cov(mtcars)
+```
+
+
+heterogeneous correlations in one matrix 
+
+pearson (numeric-numeric)
+polyserial (numeric-ordinal)
+polychoric (ordinal-ordinal)
+
+x is a data frame with ordered factors and numeric variables
+
+library polycor
+```{r}
+polycor::hetcor(mtcars)
+polycor::polyserial(mtcars$cyl,mtcars$carb)
+polycor::polychor(mtcars$cyl,mtcars$carb)
+```
+
+**Hmisc::rcorr()**
+```{r, eval=FALSE}
+# rcorr(x, y, type=c("pearson","spearman")) # with P values
+```
+
+```{r}
+Hmisc::rcorr(as.matrix(mtcars))
+```
+
+
+# check the test assumptions  
+
+1. Is the covariation linear? 
+2. (x, y) follow a normal distribution?
+Use Shapiro-Wilk normality test, R function: shapiro.test()
+
+```{r}
+plot(mtcars$mpg,mtcars$wt)
+```
+
+Shapiro-Wilk test can be performed as follow:
+H0: the data are normally distributed
+H1: the data are not normally distributed
+
+
+Shapiro-Wilk normality test for mpg
+```{r}
+shapiro.test(mtcars$mpg) # => p = 0.1229
+```
+
+Shapiro-Wilk normality test for wt
+```{r}
+shapiro.test(mtcars$wt) # => p = 0.09
+```
+
+From the output, the two p-values are greater than the significance level 0.05 implying that the distribution of the data are not significantly  different from normal distribution. In other words, we can assume 
+the normality.
+
+Visual inspection of the data normality using Q-Q plots 
+(quantile-quantile plots). Q-Q plot draws the correlation between a  given sample and the normal distribution.
+```{r}
+qqplot(mtcars$mpg,mtcars$wt)
+```
+
+# correlation test
+```{r, eval=FALSE}
+cor.test(x,y,method=c("pearson","kendall","spearman"))
+```
+
+```{r}
+cor.test(mtcars$mpg,mtcars$wt)
+```
+
+
+# big correlation matrix
+
+http://search.r-project.org/library/HiClimR/html/fastCor.html
+
+https://www.r-bloggers.com/2013/02/bigcor-large-correlation-matrices-in-r/
+
+
+# Visualization correlation matrix   
+
+```{r}
+KOR<-cor(mtcars)
+```
+
+symnum() graph
+```{r}
+symnum(KOR, cutpoints = c(-1, -0.6, 0, 0.6, 1),
+       symbols = c(" ", ".", "+", "*"), abbr.colnames = TRUE)
+```
+
+cutpoints: correlation coefficient cutpoints. 
+The correlation coefficients between 0 and 0.3 are replaced by a space (); correlation coefficients between 0.3 and 0.6 are replaced by . ; etc .
+
+**corrplot::corrplot()**
+```{r}
+corrplot::corrplot(KOR)
+```
+
+```{r}
+corrplot::corrplot(KOR, method="circle", type="lower")
+```
+
+```{r}
+corrplot::corrplot(KOR, method="pie", type="lower")
+```
+
+```{r}
+corrplot::corrplot(KOR, method="number", type="lower")
+```
+
+```{r}
+corrplot::corrplot.mixed(KOR, lower="number", upper="circle",tl.pos="lt")
+```
+
+
+**PerformanceAnalytics::chart.Correlation**
+```{r}
+PerformanceAnalytics::chart.Correlation(KOR, method="pearson", histogram=TRUE)
+```
+
+**corrgram::corrgram()**
+```{r}
+corrgram::corrgram(KOR)
+```
+
+```{r,eval=FALSE}
+corrgram::corrgram(KOR, order=TRUE, lower.panel=panel.shade, upper.panel=panel.pie, text.panel=panel.txt, main="KOR")
+```
+
+**gclus::**
+```{r}
+COL.KOR<-gclus::dmat.color(KOR)
+ORD.KOR<- gclus::order.single(KOR)
+gclus::cpairs(KOR, ORD.KOR, panel.colors=COL.KOR, gap=.5, main="KOR")      
+```
+
+
+

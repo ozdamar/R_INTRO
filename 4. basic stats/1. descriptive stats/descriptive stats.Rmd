@@ -1,0 +1,176 @@
+---
+title: "Descriptive Statistics"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+author: "ozge.ozdamar@msgsu.edu.tr"
+output:
+  html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+<img src="msgsulogo.png" style="position:absolute;top:0px;right:0px;" />
+
+
+***
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MSGSU ISTATISTIK BOLUMU - R ILE ISTATISTIKSEL PROGRAMLAMA DERS NOTLARI 2021</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ozge.ozdamar@msgsu.edu.tr</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+
+Hata ve öneriler için `r emo::ji("email")`
+
+
+***
+
+**REFERENCES**
+
+
+**LIBRARIES**
+```{r,eval=FALSE}
+rm(list=ls())
+.packages = c("Hmisc","pastecs","psych", "doBy", "reshape")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+```
+
+**FUNCTIONS**
+```{r,eval=FALSE}
+base::summary()
+Hmisc::describe()
+pastecs::stat.desc()
+psych::describe()
+doBy::
+reshape::
+stats::aggregate()
+```
+**data**
+
+```{r}
+head(mtcars)
+```
+***
+
+# Descriptive statistics
+
+**statistical functions**
+```{r}
+mean(mtcars$mpg) # aritmetik ortalama
+sd(mtcars$mpg) # standart sapma
+var(mtcars$mpg) # varyans
+min(mtcars$mpg) 
+max(mtcars$mpg)
+median(mtcars$mpg) #medyan = ortanca
+length(mtcars$mpg)
+range(mtcars$mpg)  # rank
+quantile(mtcars$mpg) # kartil
+quantile(mtcars$mpg, probs = seq(0, 1, 0.25), na.rm = FALSE,names = TRUE, type = 7)
+quantile(mtcars$mpg, prob = seq(0, 1, length = 11), type = 5) # desil
+quantile(mtcars$mpg, c(.32, .57, .98)) # persentil
+fivenum(mtcars$mpg) # Tukey’s five-number summary (minimum, lower-hinge, median, upper-hinge, maximum)
+                    # lower hinge is the 25th percentile.
+                    # The midhinge is the 50th percentile (the median).
+                    # The upper hinge is the 75th percentile.
+psych::kurtosi(mtcars$mpg) # kurtosis = basiklik
+psych::skew(mtcars$mpg) # skewness = carpiklik
+```
+
+
+**base**
+```{r}
+summary(mtcars[,1:4])
+```
+
+**library(Hmisc)**
+```{r}
+Hmisc::describe(mtcars[,1:4])
+```
+
+**library(pastecs)**
+```{r}
+pastecs::stat.desc(mtcars[,1:4])
+```
+
+**library(psych)**
+```{r}
+# psych::describe(mtcars[,1:4])
+```
+
+**fonksiyon + sapply() ile **
+```{r}
+ist1 <- function(x, na.omit=FALSE){
+  if (na.omit)
+    x <- x[!is.na(x)]
+  m <- mean(x)
+  n <- length(x)
+  s <- sd(x)
+  skew <- sum((x-m)^3/s^3)/n
+  kurt <- sum((x-m)^4/s^4)/n - 3
+  return(c(n=n, art.ort=m, st.sapma=s, carpiklik=skew, basiklik=kurt))
+}
+
+sapply(mtcars[,1:4], ist1)
+```
+
+
+## Descriptive statistics by group
+```{r}
+aggregate(mtcars[,1:6], by = list(silindir = mtcars$cyl), mean) # aggregate tek fonk kullanir
+```
+
+```{r}
+aggregate(mtcars[,1:6], by = list(mtcars$cyl), sd)
+```
+
+```{r}
+aggregate(mtcars, by = list(silindir = mtcars$cyl,vites = mtcars$gear), sd)
+```
+
+**by(data, factorlist, function)**
+```{r}
+ist2 <- function(x) {c(toplam = sum(x),s.sapma=sd(x))} # 1den fazla fonk icin by
+by(mtcars$mpg, mtcars$cyl, ist2) 
+```
+
+**library(doBy)**
+```{r,eval=FALSE}
+summaryBy(formula, data=dataframe, FUN=function)
+var1 + var2 + var3 + ... + varN ~ groupvar1 + groupvar2 + ... + groupvarN
+```
+
+```{r}
+doBy::summaryBy(mpg + hp + wt ~ am, data = mtcars, FUN = ist1)
+```
+
+**library(psych)**
+```{r}
+psych::describeBy(mtcars[,1:4], mtcars$am)
+```
+
+```{r}
+psych::describeBy(mtcars[,1:4], mtcars$cyl)
+```
+
+
+**library(reshape)**
+```{r,eval=FALSE}
+df <- reshape::melt(dataframe, measure.vars=y, id.vars=g)
+```
+
+```{r}
+ist3 <- function(x)(c(n=length(x), mean=mean(x), sd=sd(x)))
+dfm <- reshape::melt(mtcars, measure.vars=c("mpg", "hp", "wt"),
+              id.vars=c("am", "cyl"))
+reshape::cast(dfm, am + cyl + variable ~ ., ist3)
+
+```
+
+

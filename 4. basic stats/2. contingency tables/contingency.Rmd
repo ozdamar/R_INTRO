@@ -1,0 +1,437 @@
+---
+title: "Contingency Tables in R"
+author: "ozge.ozdamar@msgsu.edu.tr"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output:
+  html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+<img src="msgsulogo.png" style="position:absolute;top:0px;right:0px;" />
+
+
+***
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MSGSU ISTATISTIK BOLUMU - R ILE ISTATISTIKSEL PROGRAMLAMA DERS NOTLARI 2021</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ozge.ozdamar@msgsu.edu.tr</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+Hata ve öneriler için `r emo::ji("email")`
+
+
+***
+
+**REFERENCES**
+
+**LIBRARIES**
+```{r,warning=FALSE,message=FALSE,results='hide'}
+.packages = c("pryr")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+```
+
+***
+
+# one-way table
+
+A one-way table is the tabular display of categorical data in the form of frequency counts and/or relative frequencies.
+
+<style>
+div.blue pre { background-color:lightblue; }
+div.blue pre.r { background-color:lightbblue; }
+</style>
+
+<div class = "blue">
+```{r, eval=FALSE}
+table(...,
+        exclude = if (useNA == "no") c(NA, NaN),
+        useNA = c("no", "ifany", "always"),
+        dnn = list.names(...), deparse.level = 1)
+```
+
+</div>
+
+```{r}
+d1<-c(3,5,7,NA,3,2,6,8,5,6,8,NA,5,7,3,4)
+d1.1dt<-table(d1,useNA = "ifany")
+d1.1dt
+```
+
+```{r}
+Pet <- factor(c("Cat","Dog","Dog","Dog","Cat","Dog","Dog","Cat","Dog","Cat"))
+Food <- factor(c("Dry","Wet","Wet","Wet","Wet","Wet", "Dry","Wet","Dry","Wet"))
+d2.1dt <- table(Pet) 
+d2.1dt
+```
+
+
+```{r}
+head(mtcars)
+```
+
+```{r}
+cars.1dt<-table(mtcars$cyl,useNA = "ifany") 
+cars.1dt
+```
+
+
+```{r}
+mode(cars.1dt)
+```
+
+```{r}
+class(cars.1dt)
+```
+
+```{r}
+is.table(cars.1dt)
+```
+
+```{r}
+is.vector(cars.1dt)
+```
+
+```{r}
+is.matrix(cars.1dt)
+```
+
+```{r}
+is.array(cars.1dt)
+```
+
+```{r}
+dimnames(cars.1dt)
+```
+
+```{r}
+dim(cars.1dt)
+```
+
+```{r}
+summary(cars.1dt)
+```
+
+```{r}
+str(cars.1dt)
+```
+
+
+**calculations on a table**
+
+```{r}
+cars.1dt
+```
+
+
+```{r}
+sum(cars.1dt)
+```
+
+
+```{r}
+addmargins(cars.1dt)
+```
+
+
+```{r}
+prop.table(cars.1dt) # proportional cross table
+```
+
+```{r}
+sum(prop.table(cars.1dt)) # sum = 1
+```
+
+```{r}
+addmargins(prop.table(cars.1dt))
+```
+
+
+```{r}
+plot(cars.1dt)
+```
+
+```{r}
+barplot(cars.1dt)
+```
+
+# two way table
+
+```{r}
+Pet
+```
+
+```{r}
+Food
+```
+
+```{r}
+d2.2dt<-table(Pet,Food)
+d2.2dt
+```
+
+
+```{r}
+cars.2dt<-table(transmission=mtcars$am,cylinder=mtcars$cyl, useNA = "ifany") 
+# cars.2dt: cross tab of transmission by cylinder
+cars.2dt
+```
+
+```{r}
+class(cars.2dt)
+```
+
+```{r}
+mode(cars.2dt)
+```
+
+```{r}
+is.table(cars.2dt)
+```
+
+```{r}
+is.matrix(cars.2dt)
+```
+
+```{r}
+is.array(cars.2dt)
+```
+
+```{r}
+dimnames(cars.2dt)
+```
+
+
+```{r}
+dimnames(cars.2dt)
+```
+
+```{r}
+summary(cars.2dt)
+```
+
+
+```{r}
+str(cars.2dt)
+```
+
+**calculations on two way table**
+```{r}
+cars.2dt
+```
+
+```{r}
+sum(cars.2dt)
+```
+
+```{r}
+addmargins(cars.2dt)
+```
+
+```{r}
+prop.table(cars.2dt) # proportional cross table
+```
+
+
+```{r}
+prop.table(cars.2dt) # proportional cross table
+```
+
+```{r}
+addmargins(prop.table(cars.2dt))
+```
+
+```{r}
+plot(cars.2dt)
+```
+
+```{r}
+barplot(cars.2dt)
+```
+
+# three-way table
+```{r}
+A <- sample(c(T,F), 100, replace=T)
+B <- sample(c(T,F), 100, replace=T)
+C <- sample(c(T,F), 100, replace=T)
+d3.3dt <- table(A,B,C)
+d3.3dt
+```
+
+
+```{r}
+is.matrix(d3.3dt)
+```
+
+
+```{r}
+is.list(d3.3dt)
+```
+
+```{r}
+cars.3dt<-table(transmission=mtcars$am,cylinder=mtcars$cyl, gear=mtcars$gear,useNA = "ifany")
+# cars.3dr :cross tab of transmission by cylinder by gear
+cars.3dt
+```
+
+
+```{r}
+class(cars.3dt)
+```
+
+```{r}
+mode(cars.3dt)
+```
+
+```{r}
+is.table(cars.3dt)
+```
+
+```{r}
+is.matrix(cars.3dt)
+```
+
+
+```{r}
+is.array(cars.3dt)
+```
+
+```{r}
+dimnames(cars.3dt)
+```
+
+```{r}
+dim(cars.3dt)
+```
+
+```{r}
+summary(cars.3dt)
+```
+
+
+```{r}
+str(cars.3dt)
+```
+
+```{r}
+sum(cars.3dt)
+```
+
+```{r}
+addmargins(cars.3dt)
+```
+
+
+```{r}
+prop.table(cars.3dt) # proportional cross table
+```
+
+
+```{r}
+sum(prop.table(cars.3dt)) # sum = 1
+```
+
+```{r}
+addmargins(prop.table(cars.3dt))
+```
+
+```{r}
+plot(cars.3dt)
+```
+
+
+```{r,eval=FALSE}
+barplot(cars.3dt) # !X?
+```
+
+## subsetting table
+
+```{r}
+# subsetting table
+d2.2dt
+```
+
+```{r}
+d2.2dt[,2] # food=wet
+```
+
+```{r}
+d2.2dt[2,] # pet=dog
+```
+
+```{r}
+cars.3dt
+```
+
+```{r}
+cars.3dt[,,1]
+```
+
+```{r}
+cars.3dt[,,3]
+```
+
+
+```{r}
+table(Pet,Food)
+```
+
+```{r}
+ftable(Pet,Food) # flat table
+```
+
+
+# other packages
+
+## `janitor::tabyl()`
+
+```{r}
+janitor::tabyl(mtcars$cyl,sort=TRUE)
+```
+
+
+```{r, eval=FALSE}
+janitor::tabyl(mtcars$cyl,mtcars$gear)
+```
+
+## `epiDisplay::tabl()`
+
+```{r}
+epiDisplay::tab1(mtcars$cyl, sort.group = "decreasing", cum.percent = TRUE)
+```
+
+## `summarytools::freq()`
+
+```{r}
+summarytools::freq(mtcars$cyl, order = "freq")
+```
+
+
+## `gmodels::CrossTable()`
+
+```{r}
+gmodels::CrossTable(mtcars$cyl)
+```
+
+
+## `questionr::freq()`
+
+```{r}
+questionr::freq(mtcars$cyl, cum = TRUE, sort = "dec", total = TRUE)
+```
+
+# interactive tables
+
+[REF](https://rfortherestofus.com/2019/11/how-to-make-beautiful-tables-in-r/)
+
+[REF](https://www.littlemissdata.com/blog/prettytables)
+
+
