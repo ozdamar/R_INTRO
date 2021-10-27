@@ -1,0 +1,172 @@
+---
+title: "R Dashboards"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+author: "ozge.ozdamar@msgsu.edu.tr"
+output:
+  html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+<img src="msgsulogo.png" style="position:absolute;top:0px;right:0px;" />
+
+
+***
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MSGSU ISTATISTIK BOLUMU - R ILE ISTATISTIKSEL PROGRAMLAMA DERS NOTLARI 2021</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ozge.ozdamar@msgsu.edu.tr</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+
+Hata ve öneriler için `r emo::ji("email")`
+
+
+***
+
+**REFERENCES**
+
+[Flexdashboard](https://rmarkdown.rstudio.com/flexdashboard/)
+
+https://www.kaggle.com/philippsp/interactive-dashboards-in-r
+
+https://github.com/pbatey/flexdashboard-example
+
+https://www.r-bloggers.com/deploying-flexdashboard-on-github-pages/
+
+**LIBRARIES**
+```{r,eval=FALSE}
+rm(list=ls())
+.packages = c("flexdashboard")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+```
+
+**FUNCTIONS**
+```{r,eval=FALSE}
+
+```
+
+# Create Dashboard
+File -> New File -> R Markdown -> From Template -> Flex Dashboard
+
+metadata:
+```{r, eval=FALSE}
+
+--
+title: "Deneme"
+output: flexdashboard::flex_dashboard
+        orientation: column # default or rows
+       # vertical_layout: scroll
+--
+```
+
+# Create Column
+```{r, eval=FALSE}
+
+Column {data-width=650}
+-----------------------------------
+
+  
+  
+Column {data-width=650}
+-----------------------------------
+
+```
+
+You can give names to columns to be practical. Column names will not appear in dashboard. 
+
+Use 14 or more '-'
+
+# Create Chart
+
+```{r, eval=FALSE}
+Column {data-width=650}
+-----------------------------------
+
+### Chart A
+
+
+. ```{r}
+
+. ``` 
+
+Column {data-width=650}
+-----------------------------------
+
+### Chart B
+
+. ```{r}
+
+. ```
+### Chart C
+
+. ```{r}
+
+. ```
+ 
+```
+
+
+Every chart is placed in one column. One column can include multiple charts. Dashboard width = 1000
+
+```{r, eval=FALSE}
+Column {data-width=650}
+-----------------------------------
+
+### Chart A
+
+. ```{r}
+plot(mtcars$mpg)
+. ``` 
+
+Column {data-width=650}
+-----------------------------------
+
+### Chart B
+
+. ```{r}
+plot(mtcars$cyl)
+. ```
+### Chart C
+
+. ```{r}
+plot(mtcars$disp)
+. ```
+ 
+```
+
+
+# Dashboard Layout
+
+Dashboard width = 1000. Arrange column widths 'Column {data-width=650}'
+
+For arranging row-wise:
+```{r, eval=FALSE}
+
+--
+title: "Deneme"
+output: flexdashboard::flex_dashboard
+        orientation:rows 
+--
+```
+
+'Column{data-height=650}'
+
+fore more:
+https://rmarkdown.rstudio.com/flexdashboard/layouts.html
+
+# Multiple pages
+
+## Tabset
+
+## multiple pages
+
+Use 16 or more '-'

@@ -1,0 +1,114 @@
+---
+title: " Canım Dashboardum"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dygraphs)
+library(htmlwidgets)
+```
+
+
+Sidebar {.sidebar}
+=====================================
+
+merhaba
+
+
+
+Row
+-----------------------------------------------------------------------
+
+
+Page 1 {data-navmenu="Menu A"}
+==================================================================
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+plot(mtcars$drat)
+```
+
+### Chart C
+
+```{r, eval=FALSE}
+gauge(
+  value,
+  min,
+  max,
+  sectors = gaugeSectors(),
+  symbol = NULL,
+  label = NULL,
+  abbreviate = TRUE,
+  abbreviateDecimals = 1,
+  href = NULL
+)
+gaugeSectors(
+  success = NULL,
+  warning = NULL,
+  danger = NULL,
+  colors = c("success", "warning", "danger")
+)
+```
+
+
+```{r, eval=FALSE}
+gauge(value = sum(mtcars$mpg),
+      min = 0,max = 1000, symbol = '%', iyi=c(800,1000), normal=c(400, 799), dikkat=c(0, 399))
+gaugeSectors(
+  iyi = NULL,
+  normal = NULL,
+  dikkat = NULL,
+  colors = c("başarılı", "normal", "dikkat")
+)
+```
+
+Page 2 {data-navmenu="Menu A"}
+==================================================================
+[Page 3]
+
+Page 3 {data-orientation=rows, data-navmenu="Menu B"}
+==================================================================
+
+
+Row {data-height=650}
+-------------------------------------
+### Chart C
+
+```{r}
+valueBox(mean(mtcars$mpg), 
+         caption = 'Median Trip Duration (Minutes)', icon = 'fa-clock-o')
+```
+
+Row {data-height=350}
+-------------------------------------
+### Chart d
+```{r}
+plot(mtcars)
+```
+
+### Chart e
+
+```{r}
+lungDeaths <- cbind(mdeaths, fdeaths)
+ dygraph(lungDeaths)
+```
+
