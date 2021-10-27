@@ -1,0 +1,404 @@
+---
+title: "Exercise 1"
+author: "ozge.ozdamar@msgsu.edu.tr"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" alt="Creative Commons License" style="border-width:0"/></a><br />[MSGSU ISTATISTIK BOLUMU - R ILE ISTATISTIKSEL PROGRAMLAMA DERS NOTLARI 2021]{xmlns:dct="http://purl.org/dc/terms/" property="dct:title"} by [[ozge.ozdamar\@msgsu.edu.tr]{xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName"}](mailto:ozge.ozdamar@msgsu.edu.tr){.email} is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+Hata ve öneriler için `r emo::ji("email")`
+
+## Topic 1
+
+### Exercise
+
+*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+
+Write the R code required to add two plus two:
+
+```{r two-plus-two, exercise=TRUE}
+
+```
+
+### Exercise with Code
+
+*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+
+Now write a function that adds any two numbers and then call it:
+
+```{r add-function, exercise=TRUE, exercise.lines = 5}
+add <- function() {
+  
+}
+```
+
+## Topic 2
+
+### Exercise with Hint
+
+*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
+
+Modify the following code to limit the number of rows printed to 5:
+
+```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
+mtcars
+```
+
+```{r print-limit-hint}
+head(mtcars)
+```
+
+### Quiz
+
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+
+Some questions to verify that you understand the purposes of various base and recommended R packages:
+
+```{r quiz}
+quiz(
+  question("Which package contains functions for installing other R packages?",
+    answer("base"),
+    answer("tools"),
+    answer("utils", correct = TRUE),
+    answer("codetools")
+  ),
+  question("Which of the R packages listed below are used to create plots?",
+    answer("lattice", correct = TRUE),
+    answer("tools"),
+    answer("stats"),
+    answer("grid", correct = TRUE)
+  )
+)
+```
+
+## A
+
+Asagidaki ifadeleri R'a girerek sonuçları inceleyin
+
+**A1**
+`1:5 + 6:10`
+```{r A1, exercise=TRUE}
+
+```
+
+**A2**
+`c(1, 3, 6, 10, 15) + c(0, 1, 3, 6, 10)`
+```{r A2, exercise=TRUE}
+
+```
+
+**A3**
+`sum(1:5)`
+```{r A3, exercise=TRUE}
+
+```
+
+**A4**
+`median(1:5)`
+```{r A4, exercise=TRUE}
+
+```
+
+**A5**
+`sum(1, 2, 3, 4, 5)`
+```{r A5, exercise=TRUE}
+
+```
+
+**A6**
+`median(1, 2, 3, 4, 5)`
+```{r A6, exercise=TRUE}
+
+```
+
+
+**A7**
+`c(2, 3, 5, 7, 11, 13)-2`
+```{r A7, exercise=TRUE}
+
+```
+
+**A8**
+`-2:2 * -2:2`
+```{r A8, exercise=TRUE}
+
+```
+
+**A9**
+`identical(2 ^ 3, 2 ** 3)`
+```{r A9, exercise=TRUE}
+
+```
+
+**A10**
+`1:10 / 3`
+```{r A10, exercise=TRUE}
+
+```
+
+**A11**
+`1:10 %/% 3`
+```{r A11, exercise=TRUE}
+
+```
+
+**A12**
+`1:10 %% 3`
+```{r A12, exercise=TRUE}
+
+```
+
+**A13**
+`cos(c(0, pi / 4, pi / 2, pi))`
+```{r A13, exercise=TRUE}
+
+```
+
+**A14**
+``exp(pi * 1i) + 1
+```{r A14, exercise=TRUE}
+
+```
+
+**A15**
+`factorial(7) + factorial(1) - 71 ^ 2`
+```{r A15, exercise=TRUE}
+
+```
+
+**A16**
+`choose(5, 0:5)`
+```{r A16, exercise=TRUE}
+
+```
+
+**A17**
+`c(3, 4 - 1, 1 + 1 + 1) == 3`
+```{r A17, exercise=TRUE}
+
+```
+
+**A18**
+`1:3 != 3:1`
+```{r A18, exercise=TRUE}
+
+```
+
+**A19**
+exp(1:5) < 100
+```{r A19, exercise=TRUE}
+
+```
+
+**A20**
+`(1:5) ^ 2 >= 16`
+```{r A20, exercise=TRUE}
+
+```
+
+**A21**
+`sqrt(2) ^ 2 == 2`
+```{r A21, exercise=TRUE}
+
+```
+
+**A22**
+`sqrt(2) ^ 2 -2`
+```{r A22, exercise=TRUE}
+
+```
+
+**A23**
+`all.equal(sqrt(2) ^ 2, 2)`
+```{r A23, exercise=TRUE}
+
+```
+
+**A24**
+`all.equal(sqrt(2) ^ 2, 3)`
+```{r A24, exercise=TRUE}
+
+```
+
+**A25**
+`isTRUE(all.equal(sqrt(2) ^ 2, 3))`
+```{r A25, exercise=TRUE}
+
+```
+
+**A26**
+`c("Can", "you", "can", "a", "can", "as","a", "canner", "can", "can", "a", "can?") == "can"`
+```{r A26, exercise=TRUE}
+
+```
+
+**A27**
+`c("A", "B", "C", "D") < "C"`
+```{r A27, exercise=TRUE}
+
+```
+
+**A28**
+`c("a", "b", "c", "d") < "C"`
+```{r A28, exercise=TRUE}
+
+```
+
+## B
+Aşağıdaki soruları önce kağıt üzerinde çözün sonra R' da kontrol edin
+
+**B1**
+`7:11`
+```{r B1, exercise=TRUE}
+
+```
+
+**B2**
+`seq(2-9)`
+```{r B2, exercise=TRUE}
+
+```
+
+**B3**
+`seq(4,10,by=2)`
+```{r B3, exercise=TRUE}
+
+```
+
+**B4**
+`seq(3,30,length=10)`
+```{r B4, exercise=TRUE}
+
+```
+
+**B5**
+`seq(6,-4,by=-2)`
+```{r B5, exercise=TRUE}
+
+```
+
+**B6**
+`rep(2,4)`
+```{r B6, exercise=TRUE}
+
+```
+
+**B7**
+`rep(c(1,2),4)`
+```{r B7, exercise=TRUE}
+
+```
+
+**B8**
+`rep(c(1,2),c(4,4))`
+```{r B8, exercise=TRUE}
+
+```
+
+**B9**
+`rep(1:4,4)`
+```{r B9, exercise=TRUE}
+
+```
+
+**B10**
+`rep(1:4,rep(3,4))`
+```{r B10, exercise=TRUE}
+
+```
+
+## C
+`rep` fonksiyonunu kullanarak şu vektörleri oluşturun
+
+**C1**
+`[1] 6 6 6 6 6 6`
+ 
+```{r C1, exercise=TRUE}
+
+```
+
+**C2**
+`[1] 5 8 5 8 5 8 5 8`
+```{r C2, exercise=TRUE}
+
+```
+**C3**
+`[1] 5 5 5 5 8 8 8 8`
+```{r C3, exercise=TRUE}
+
+```
+
+## D
+`rep` ve `seq` fonksiyonları kullanarak aşağıdaki vektörleri oluşturun
+**D1**
+`[1] 1 2 3 4 5 6 7 8 9`
+```{r D1, exercise=TRUE}
+
+```
+
+**D2**
+`[1] "m" "w" "m" "w" "m" "w" "m" "w" "m" "w"`
+```{r D2, exercise=TRUE}
+
+```
+
+**D3**
+`[1] 1 2 3 4 1 2 3 4 1 2 3 4`
+```{r D3, exercise=TRUE}
+
+```
+
+**D4**
+`[1] 4 4 4 3 3 3 2 2 2 1 1 1`
+Warning in rep(seq(1, 5, 1), each = c(1, 2, 3, 4, 5)): first element used of 'each' argument
+```{r D4, exercise=TRUE}
+
+```
+
+**D5**
+` [1] 1 2 3 4 5`
+```{r D5, exercise=TRUE}
+
+```
+
+## E
+X için sonuçları önce kağıt üzerinde çözün, sonra R da kontrol edin
+
+`X<- c(5,9,2,3,4,6,7,0,8,12,2,9)`
+
+**E1**
+`X[2]`
+```{r E1, exercise=TRUE}
+
+```
+
+**E2**
+`X[2:4]`
+```{r E2, exercise=TRUE}
+
+```
+
+**E3**
+`X[c(2,3,6)]`
+```{r E3, exercise=TRUE}
+
+```
+
+**E4**
+`X[c(1:5,10:12)]`
+```{r E4, exercise=TRUE}
+
+```
+
+**E5**
+`X[-(10:12)]`
+```{r E5, exercise=TRUE}
+
+```
