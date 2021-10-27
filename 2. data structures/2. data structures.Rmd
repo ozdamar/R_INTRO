@@ -1,0 +1,63 @@
+---
+title: "Data Structures"
+author: "ozge.ozdamar@msgsu.edu.tr"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output:
+  html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+***
+<img src="okk2020logo.png" style="position:absolute;top:0px;right:0px;" />
+
+***
+
+
+***
+***
+**libraries**
+```{r,warning=FALSE,message=FALSE,results='hide'}
+.packages = c("tables","janitor","epiDisplay","summarytools","gmodels","questionr")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+```
+
+***
+
+
+**references**
+
+***
+
+# Data Structures
+data types                | data structure 
+--------------------------|-----------------
+various                   |  tabular
+numeric                   |  matrix
+numeric + time            |  time series
+jason/xml                 |  hierarchical
+html                      |  text/ hierarchical
+free text                 |  text
+numeric + location        |  spatial
+numeric + location + time |  spatio-temporal
+graph                     |  tree / hierarchical
+
+
+
+***
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">OYKK2020-R ile Veri Önişleme</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ozge.ozdamar@msgsu.edu.tr</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+***
+
+
