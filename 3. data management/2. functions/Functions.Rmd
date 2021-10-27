@@ -1,0 +1,256 @@
+---
+title: "Functions in R"
+author: "ozge.ozdamar@msgsu.edu.tr"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output:
+  html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+<img src="msgsulogo.png" style="position:absolute;top:0px;right:0px;" />
+
+
+***
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">MSGSU ISTATISTIK BOLUMU - R ILE ISTATISTIKSEL PROGRAMLAMA DERS NOTLARI 2021</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">ozge.ozdamar@msgsu.edu.tr</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+Hata ve öneriler için `r emo::ji("email")`
+
+***
+
+
+
+
+# 1. Repetition and looping
+Looping constructs repetitively execute a statement or series of statements until a condition is not true. These include the for and while structures.
+
+Looping in R can be inefficient and time consuming when you are processing the rows or columns of large datasets. Whenever possible, it is better to use Rs builtin numerical and character functions in conjunction with the apply family of functions
+
+
+##   for    
+
+ The for loop executes a statement repetitively until a variable???s value is no longer contained in the sequence seq. The syntax is
+
+for (var in seq) statement In this example
+
+for (i in 1:10)  print("Hello")
+
+** Simple for loop which prints integers**
+
+```{r}
+for (n in 1:10) {
+  print(paste("Sayı:",n))
+  }
+```
+
+**This loop assigns variables within the inner-code**
+```{r}
+for (n in 1:10) {
+  n_sq <- n^2
+  print(paste(n, "'in karesi:",n_sq))
+ }
+```
+
+** If statement nested inside loop**
+```{r}
+for (n in 1:10) {
+  n_sq <- n^2
+  print(paste("sayının karesi:",n_sq))
+  if (n==10) 
+    {print("Döngü bitmiştir!")}
+}
+```
+
+** Break on a condition:**
+```{r}
+for (n in 1:10) {
+  print(paste("The number is",n))
+  if(n==5) {break}
+}
+```
+
+**loop on lists**
+```{r}
+L <- list(A = 84, B = c("Istanbul", "Ankara", "Izmir", "Adana", "Mersin"), 
+            C = FALSE)
+L
+```
+
+```{r}
+for (i in L) {
+  print(i)
+}
+```
+
+
+```{r}
+for (i in 1:length(L)) {
+  print(L[[i]])
+}
+```
+
+
+**loop on matrix**
+```{r}
+A<-matrix(1:12, 3,4)
+A
+```
+
+```{r}
+for (i in 1:nrow(A)) {
+  for (j in 1:ncol(A)) {
+    print(paste("Satir", i, "ve sutun", j, "degeri:", A[i,j]))
+  }
+}
+```
+
+
+ loop + control flow
+```{r}
+x <- c(16, 90, 13, 50, 23, 67, 100, 45, 30)
+
+for (i in x){
+  if (i >= 50) {
+    print("Gectin")
+  } else {
+    print("Daha calis")
+  }
+  print(i)
+}
+```
+
+
+##    while    
+
+ A while loop executes a statement repetitively until the condition is no  longer true. The syntax is
+
+ while (cond) statement
+
+```{r}
+i <- 10
+while (i > 0) {print("Hello"); i <- i - 1}
+
+speed<-55
+while (speed > 30) {
+  print(paste("Your speed is", speed))
+  if (speed > 48) {
+    print("Slow down big time!")
+    speed <- speed - 11
+  } else {
+    print("Slow down!")
+    speed <- speed - 6
+  }}
+
+speed <- 88
+
+while (speed > 30) {
+  print(paste("Your speed is", speed))
+
+  # Break the while loop when speed exceeds 80
+  if (speed > 80) {
+    break
+  }
+  
+  if (speed > 48) {
+    print("Slow down big time!")
+    speed <- speed - 11
+  } else {
+    print("Slow down!")
+    speed <- speed - 6
+  }
+}
+
+```
+
+
+# 2. Conditional execution
+
+In conditional execution, a statement or statements are only executed if a specified condition is met. These constructs include if-else, ifelse, and switch.
+
+
+##   if-else    
+
+ The if-else control structure executes a statement if a given condition is true. Optionally, a different statement is executed if the condition is false. The syntax is
+
+ if (cond) statement
+ if (cond) statement1 else statement2
+
+```{r}
+a<- c("a")
+class(a)
+
+if (is.character(a)) a <- as.factor(a)
+class(a)
+
+if (!is.factor(a)) a <- as.factor(a) else print("a zaten faktor")
+
+```
+
+ Use ifelse when you want to take a binary action or when you want to input and output vectors from the construct.
+
+##   switch     
+
+ switch chooses statements based on the value of an expression.
+
+  switch(expr, ...)
+
+ ... represents statements tied to the possible outcome values of expr.
+
+```{r}
+x <- c("b", "d")
+for (i in x)
+  print(
+    switch(i,
+           a  = "A",
+           b = "B",
+           c  = "C",
+           d  = "D"
+    ) )
+
+```
+
+
+##    user defined functions      
+
+```{r,eval=FALSE}
+  myfunction <- function(arg1, arg2, ... ){ statements
+     return(object)
+                   }
+
+mystats <- function(x, parametric=TRUE, print=FALSE) {
+  if (parametric) {
+    center <- mean(x); spread <- sd(x)
+  } else {
+    center <- median(x); spread <- mad(x)
+  }
+  if (print & parametric) {
+    cat("Mean=", center, "\n", "SD=", spread, "\n")
+  } else if (print & !parametric) {
+    cat("Median=", center, "\n", "MAD=", spread, "\n")
+  }
+  result <- list(center=center, spread=spread)
+  return(result)
+}
+```
+
+```{r, eval=FALSE}
+set.seed(1234)
+x <- rnorm(500)
+y <- mystats(x)
+y
+```
+
+
+
+

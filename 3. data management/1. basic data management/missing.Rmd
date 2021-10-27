@@ -1,0 +1,635 @@
+---
+title: "Missing Data"
+author: "ozge.ozdamar@msgsu.edu.tr"
+date: "`r format(Sys.time(), '%B %d %Y')`"
+output: 
+ html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+```{r,eval=FALSE}
+rm(list=ls())
+.packages = c("car","doBy","lubridate","VIM","mi","mice", "Amelia","naniar", "dplyr", "lubridate")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+```
+
+
+# Properties of Missing Values
+
+NA =  **N**ot **A**vailable
+
+vector with missing values
+```{r}
+x <- c(1, 99, 3, NA, 5, 5, NA, 99, 3, 3, NA, 1, 3, 5, 1, 1 )
+```
+
+```{r}
+x < 3
+```
+
+```{r}
+x == 99
+```
+
+NA cannot be used in comparisons
+```{r}
+x == NA 
+```
+
+NA + anything = NA
+
+```{r}
+NA + 3
+```
+
+```{r}
+NA | TRUE
+```
+
+
+```{r}
+NA | FALSE
+```
+
+na actions in functions
+```{r}
+sum(x)
+```
+```{r}
+sum(x, na.rm = T)
+```
+
+
+NaN = **N**ot **a** **N**umber
+
+Inf = **Inf**inity
+
+-Inf = Negative **Inf**inity
+
+```{r}
+NA + NaN
+```
+
+
+```{r}
+NaN + NA
+```
+
+# data structures with MVs
+
+vector
+```{r}
+x <- c(1, 99, 3, NA, 5, 5, NA, 99, 3, 3, NA, 1, 3, 5, 1, 1 )
+```
+
+data.frame with missing values:
+```{r}
+library(datasets)
+data(airquality)
+data(sleep)
+```
+
+time series
+```{r}
+library(imputeTS)
+tsAirgap
+```
+
+spatial
+```{r}
+
+```
+
+spatio-temporal
+```{r}
+library(cutoffR)
+#hqmr.data
+```
+
+# detecting missing values
+
+**summary functions**
+
+```{r}
+summary(airquality)
+```
+
+
+```{r}
+skimr::skim(airquality)
+```
+
+```{r}
+Hmisc::describe(airquality)
+```
+
+
+**logical**
+```{r, eval=FALSE}
+base::in.na(), anyNA()
+naniar::is_na(), any_na(), any_miss(), any_complete()
+```
+
+
+```{r}
+is.na(x)
+```
+
+```{r}
+is.na(airquality)
+```
+
+```{r}
+is.na(tsAirgap)
+```
+
+```{r}
+naniar::any_na(airquality)
+```
+
+```{r}
+complete.cases(airquality)
+```
+
+
+**numerical summaries**
+```{r}
+VIM::countNA(airquality)
+```
+
+
+```{r}
+naniar::any_na(airquality)
+```
+
+
+```{r}
+naniar::any_miss(airquality)
+```
+
+```{r}
+naniar::n_miss(airquality)
+```
+
+```{r}
+naniar::n_complete(airquality)
+```
+
+# Recoding values to missing
+
+When dealing with missing values, you might want to replace values with a missing values (NA). This is useful in cases when you know the origin of the data and can be certain which values should be missing. For example, you might know that all values of “N/A”, “N A”, and “Not Available”, or -99, or -1 are supposed to be missing.
+
+```{r}
+x[x == 99] <- NA
+x
+```
+
+```{r}
+is.na(x)<-which(x==5)
+x
+```
+
+tidyr::replace_na() Missing values turns into a value (NA –> -99)
+```{r}
+tidyr::replace_na(x)
+```
+
+
+dplyr
+
+```{r, eval=FALSE}
+dplyr::na_if()
+```
+
+naniar::replace_with_na():
+Value becomes a missing value (-99 –> NA) , data.frame
+```{r, eval=FALSE}
+replace_with_na(data, replace = list(), ...)
+```
+
+```{r, eval=FALSE}
+replace_with_na_all()
+replace_with_na_at()
+replace_with_na_if()
+```
+
+
+#  Detect missing values 
+```{r,eval=FALSE}
+base::is.na(), is.na.data.frame(), is.na.numeric_version(), is.na.POSIXlt()
+naniar::any_na(), any_miss()
+stats::complete.cases()
+naniar::n_miss(), n_complete(), pct_miss()
+```
+
+```{r}
+naniar::any_na(NaN)
+naniar::any_na(NULL)
+naniar::any_na(Inf)
+```
+
+
+```{r}
+x
+complete.cases(x) # tam satirlar
+is.na(x)
+!complete.cases(x)	
+```
+
+
+
+
+```{r}
+naniar::n_miss(x)
+naniar::n_complete(x)
+naniar::pct_miss(x)
+naniar::pct_complete(x)
+```
+
+
+```{r}
+str(airquality)
+dim(airquality)
+```
+
+missing data olmayan satirlar
+```{r}
+airquality[complete.cases(airquality), ]
+dim(airquality[complete.cases(airquality), ])
+```
+
+en az bir missing data olan satirlar
+```{r}
+airquality[!complete.cases(airquality), ]
+dim(airquality[!complete.cases(airquality), ])
+```
+
+ mantiksal operatorlerin sayisal degerleri 1 ve 0 oldugundan,
+```{r}
+sum(is.na(airquality$Ozone)) # Dream degiskenindeki bos gozlem sayisi 
+VIM::countNA(airquality$Ozone) # VIM paketi ile
+mean(is.na(sleep$Dream)) # Dream degiskenindeki bos gozlem orani
+mean(!complete.cases(sleep)) # veri setinde en az bir bos gozlem olan satir orani
+```
+
+# missing data in arguments
+```{r, eval=FALSE}
+na.omit, na.exclude, na.pass, na.fail, na.action, na.rm, na.last, useNA
+
+```
+
+```{r}
+mean(airquality$Ozone)
+mean(airquality$Ozone,na.rm=TRUE)
+mean(na.omit(airquality$Ozone))
+na.omit(airquality$Ozone)
+airquality$Ozone
+```
+
+
+```{r}
+na.omit(airquality)
+```
+returns the object with observations removed if they contain any missing values
+
+```{r}
+na.exclude(airquality) 
+```
+differences between omitting and excluding NAs can be seen in some prediction and residual functions
+
+```{r,eval=FALSE}
+na.fail(airquality)
+```
+returns the object only if it contains no missing values
+
+```{r}
+na.pass(airquality) 
+```
+returns the object unchanged
+
+# omit vs exclude
+```{r}
+omit.model<- lm(Ozone ~ Solar.R, data = airquality, na.action = na.omit)
+exclude.model<- lm(Ozone ~ Solar.R, data = airquality, na.action = na.exclude)
+```
+
+```{r}
+omit.model
+```
+
+```{r}
+exclude.model
+```
+
+```{r}
+resid(omit.model)
+```
+
+```{r}
+resid(exclude.model)
+```
+
+```{r,eval=FALSE}
+data.frame(resid(omit.model),resid(exclude.model)) # error
+```
+
+```{r}
+fitted(omit.model)
+```
+
+```{r}
+fitted(exclude.model)
+```
+
+na.omit and na.exclude do not use the missing values, but maintains their position for the residuals and fitted values.
+
+```{r}
+summary(airquality$Ozone)
+table(airquality$Ozone)
+table(airquality$Ozone,useNA="ifany")
+table(airquality$Ozone, useNA="always")
+```
+
+```{r}
+length(airquality$Ozone)
+x1 <- sort(airquality$Ozone)
+x1
+length(x1)
+x2 <- sort(airquality$Ozone, na.last = TRUE)
+x2
+length(x2)
+```
+
+
+
+### missing data oruntusu
+```{r}
+mice::md.pattern(airquality) # mice paketi
+```
+
+# missing data gorsellestirme
+
+# VIM paketi
+
+**Aggregations for missing/imputed values**
+Calculate or plot the amount of missing/imputed values in each variable and the amount of missing/imputed values in certain combinations of variables.
+
+```{r, eval=FALSE}
+aggr(x, delimiter = NULL, plot = TRUE, ...)
+
+## S3 method for class 'aggr'
+plot(x, col = c("skyblue", "red", "orange"), bars = TRUE,
+  numbers = FALSE, prop = TRUE, combined = FALSE, varheight = FALSE,
+  only.miss = FALSE, border = par("fg"), sortVars = FALSE,
+  sortCombs = TRUE, ylabs = NULL, axes = TRUE, labels = axes,
+  cex.lab = 1.2, cex.axis = par("cex"), cex.numbers = par("cex"),
+  gap = 4, ...)
+```
+
+```{r}
+a<-VIM::aggr(airquality, prop=FALSE, numbers=TRUE) # VIM paketi
+summary(a) # missing data oruntusu
+```
+
+**matrix plot**
+
+Create a matrix plot, in which all cells of a data matrix are visualized by rectangles. Available data is coded according to a continuous color scheme, while missing/imputed data is visualized by a clearly distinguishable color.
+
+```{r, eval=FALSE}
+matrixplot(x, delimiter = NULL, sortby = NULL, col = c("red", "orange"),
+  fixup = TRUE, xlim = NULL, ylim = NULL, main = NULL,
+  sub = NULL, xlab = NULL, ylab = NULL, axes = TRUE, labels = axes,
+  xpd = NULL, interactive = TRUE, ...)
+```
+
+```{r}
+VIM::matrixplot(airquality)
+VIM::matrixplot(airquality, interactive = TRUE, sortby = "Ozone") #!
+```
+
+**Scatterplot with additional information in the margins**
+In addition to a standard scatterplot, information about missing/imputed values is shown in the plot margins. Furthermore, imputed values are highlighted in the scatterplot.
+
+```{r, eval=FALSE}
+marginplot(x, delimiter = NULL, col = c("skyblue", "red", "red4", "orange",
+  "orange4"), alpha = NULL, pch = c(1, 16), cex = par("cex"),
+  numbers = TRUE, cex.numbers = par("cex"), zeros = FALSE, xlim = NULL,
+  ylim = NULL, main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
+  ann = par("ann"), axes = TRUE, frame.plot = axes, ...)
+```
+
+```{r}
+VIM::marginplot(airquality[,c("Ozone","Solar.R")])
+VIM::marginplot(airquality[c("Ozone","Solar.R")], pch=c(20),col=c("darkgray", "red", "blue"))
+```
+
+**Marginplot Matrix**
+Create a scatterplot matrix with information about missing/imputed values in the plot margins of each panel.
+```{r, eval=FALSE}
+marginmatrix(x, delimiter = NULL, col = c("skyblue", "red", "red4",
+  "orange", "orange4"), alpha = NULL, ...)
+```
+
+
+```{r}
+VIM::marginmatrix(airquality[,-5])
+```
+
+**Barplot with information about missing/imputed values**
+Barplot with highlighting of missing/imputed values in other variables by splitting each bar into two parts. Additionally, information about missing/imputed values in the variable of interest is shown on the right hand side.
+
+```{r, eval=FALSE}
+barMiss(x, delimiter = NULL, pos = 1, selection = c("any", "all"),
+  col = c("skyblue", "red", "skyblue4", "red4", "orange", "orange4"),
+  border = NULL, main = NULL, sub = NULL, xlab = NULL, ylab = NULL,
+  axes = TRUE, labels = axes, only.miss = TRUE, miss.labels = axes,
+  interactive = TRUE, ...)
+
+```
+
+```{r}
+VIM::barMiss(airquality[,c("Month","Ozone")])
+airquality[,c("Month","Ozone")] # grafik verisini gormek icin
+```
+
+
+**Rug representation of missing/imputed values**
+Add a rug representation of missing/imputed values in only one of the variables to scatterplots.
+
+```{r, eval=FALSE}
+rugNA(x, y, ticksize = NULL, side = 1, col = "red", alpha = NULL,
+  miss = NULL, lwd = 0.5, ...)
+```
+
+```{r}
+plot(airquality$Ozone, airquality$Solar.R)
+VIM::rugNA(airquality$Ozone, airquality$Solar.R,side=1) # y eksenindeki missingleri x ekseni uzerinde gosteriyor
+VIM::rugNA(airquality$Ozone, airquality$Solar.R,ticksize = 1, col= "orange", side=2) # miss argumani ekleyerek missing yerine imputed veriler gosterilebilir ?rugNA bakiniz
+```
+
+**Scatterplot matrix with information about missing/imputed values**
+Scatterplot matrix in which observations with missing/imputed values in certain variables are highlighted.
+```{r, eval=FALSE}
+scattmatrixMiss(x, delimiter = NULL, highlight = NULL,
+  selection = c("any", "all"), plotvars = NULL, col = c("skyblue", "red",
+  "orange"), alpha = NULL, pch = c(1, 3), lty = par("lty"),
+  diagonal = c("density", "none"), interactive = TRUE, ...)
+```
+
+
+```{r}
+VIM::scattmatrixMiss(airquality) # all variables highlighted, delimiter argumani imputed degerler icin kullanilir, ?scattmatrixMiss
+```
+
+```{r}
+VIM::scattmatrixMiss(airquality, highlight = "Ozone")
+```
+**Parallel boxplots with information about missing/imputed values**
+Boxplot of one variable of interest plus information about missing/imputed values in other variables.
+
+```{r, eval=FALSE}
+pbox(x, delimiter = NULL, pos = 1, selection = c("none", "any", "all"),
+  col = c("skyblue", "red", "red4", "orange", "orange4"), numbers = TRUE,
+  cex.numbers = par("cex"), xlim = NULL, ylim = NULL, main = NULL,
+  sub = NULL, xlab = NULL, ylab = NULL, axes = TRUE,
+  frame.plot = axes, labels = axes, interactive = TRUE, ...)
+```
+
+```{r}
+VIM::pbox(airquality) # parallel boxplots obs ve miss icin
+```
+
+
+**Parallel coordinate plot with information about missing/imputed values**
+Parallel coordinate plot with adjustments for missing/imputed values. Missing values in the plotted variables may be represented by a point above the corresponding coordinate axis to prevent disconnected lines. In addition, observations with missing/imputed values in selected variables may be highlighted.
+
+```{r, eval=FALSE}
+parcoordMiss(x, delimiter = NULL, highlight = NULL, selection = c("any",
+  "all"), plotvars = NULL, plotNA = TRUE, col = c("skyblue", "red",
+  "skyblue4", "red4", "orange", "orange4"), alpha = NULL, lty = par("lty"),
+  xlim = NULL, ylim = NULL, main = NULL, sub = NULL, xlab = NULL,
+  ylab = NULL, labels = TRUE, xpd = NULL, interactive = TRUE, ...)
+```
+
+
+```{r}
+VIM::parcoordMiss(airquality) #paralel koordinatlar grafigi
+```
+**Bivariate jitter plot**
+Create a bivariate jitter plot.
+
+```{r,eval=FALSE}
+scattJitt(x, delimiter = NULL, col = c("skyblue", "red", "red4", "orange",
+  "orange4"), alpha = NULL, cex = par("cex"), col.line = "lightgrey",
+  lty = "dashed", lwd = par("lwd"), numbers = TRUE,
+  cex.numbers = par("cex"), main = NULL, sub = NULL, xlab = NULL,
+  ylab = NULL, axes = TRUE, frame.plot = axes, labels = c("observed",
+  "missing", "imputed"), ...)
+
+```
+
+
+```{r}
+VIM::scattJitt(airquality[,1:2]) # Ozone ve Solar.R icin jittered scatterplot
+plot(airquality[,1:2])
+```
+**Spineplot with information about missing/imputed values**
+Spineplot or spinogram with highlighting of missing/imputed values in other variables by splitting each cell into two parts. Additionally, information about missing/imputed values in the variable of interest is shown on the right hand side.
+
+
+```{r, eval=FALSE}
+spineMiss(x, delimiter = NULL, pos = 1, selection = c("any", "all"),
+  breaks = "Sturges", right = TRUE, col = c("skyblue", "red", "skyblue4",
+  "red4", "orange", "orange4"), border = NULL, main = NULL, sub = NULL,
+  xlab = NULL, ylab = NULL, axes = TRUE, labels = axes,
+  only.miss = TRUE, miss.labels = axes, interactive = TRUE, ...)
+
+```
+
+```{r}
+VIM::spineMiss(airquality[,c("Month","Solar.R")]) # spineplot /spinogram
+```
+
+**Scatterplot with information about missing/imputed values**
+
+In addition to a standard scatterplot, lines are plotted for the missing values in one variable. If there are imputed values, they will be highlighted.
+
+```{r, eval=FALSE}
+scattMiss(x, delimiter = NULL, side = 1, col = c("skyblue", "red",
+  "orange", "lightgrey"), alpha = NULL, lty = c("dashed", "dotted"),
+  lwd = par("lwd"), quantiles = c(0.5, 0.975), inEllipse = FALSE,
+  zeros = FALSE, xlim = NULL, ylim = NULL, main = NULL, sub = NULL,
+  xlab = NULL, ylab = NULL, interactive = TRUE, ...)
+
+```
+
+```{r}
+VIM::scattMiss(airquality[,c("Ozone","Solar.R")]) # missing data line ile gosterilir
+```
+
+**Mosaic plot with information about missing/imputed values**
+
+Create a mosaic plot with information about missing/imputed values.
+
+
+
+```{r, eval=FALSE}
+mosaicMiss(x, delimiter = NULL, highlight = NULL, selection = c("any",
+  "all"), plotvars = NULL, col = c("skyblue", "red", "orange"),
+  labels = NULL, miss.labels = TRUE, ...)
+
+```
+
+datayı duzelt
+```{r}
+VIM::mosaicMiss(airquality, high = 4, plotvars = 5:6) # mosaic plot
+```
+
+
+?growdotMiss
+?colormapMiss
+?spineMiss
+?mosaicMiss
+?histMiss
+?mapMiss
+
+## Amelia paketi ile gorsellestirme
+
+
+```{r}
+Amelia::missmap(airquality)
+```
+
+## naniar ile gorsellestirme
+```{r}
+naniar::vis_miss(airquality)
+```
+```{r}
+naniar::gg_miss_upset(airquality)
+#naniar::gg_miss_upset(riskfactors)
+```
+```{r}
+naniar::gg_miss_var(airquality)
+```
+
+```{r}
+naniar::gg_miss_case(airquality)
+```
+
+```{r}
+#naniar::gg_miss_fct(airquality)
+```
+
