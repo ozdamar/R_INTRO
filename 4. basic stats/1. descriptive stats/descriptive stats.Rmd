@@ -1,5 +1,5 @@
 ---
-title: "Descriptive Statistics"
+title: "Descriptive Statistics and EDA"
 date: "`r format(Sys.time(), '%B %d %Y')`"
 author: "ozge.ozdamar@msgsu.edu.tr"
 output:
@@ -31,12 +31,15 @@ Hata ve öneriler için `r emo::ji("email")`
 ***
 
 **REFERENCES**
+https://www.r-bloggers.com/2021/03/super-fast-eda-in-r-with-dataexplorer/
+
+https://yuzar-blog.netlify.app/posts/2021-01-09-exploratory-data-analysis-and-beyond-in-r-in-progress/
 
 
 **LIBRARIES**
 ```{r,eval=FALSE}
 rm(list=ls())
-.packages = c("Hmisc","pastecs","psych", "doBy", "reshape")
+.packages = c("Hmisc","pastecs","psych", "doBy", "reshape","DataExplorer","SmartEDA","dlookr","summarytools","skimr","gtsummary","moments","funModeling")
 .inst <- .packages %in% installed.packages()
 if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
 lapply(.packages, require, character.only=TRUE)
