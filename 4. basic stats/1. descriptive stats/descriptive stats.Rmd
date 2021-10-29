@@ -35,6 +35,9 @@ https://www.r-bloggers.com/2021/03/super-fast-eda-in-r-with-dataexplorer/
 
 https://yuzar-blog.netlify.app/posts/2021-01-09-exploratory-data-analysis-and-beyond-in-r-in-progress/
 
+https://github.com/daya6489/SmartEDA
+[BOOK](https://www.packtpub.com/product/hands-on-exploratory-data-analysis-with-r/9781789804379)
+
 
 **LIBRARIES**
 ```{r,eval=FALSE}

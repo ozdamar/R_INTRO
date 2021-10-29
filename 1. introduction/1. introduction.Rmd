@@ -106,7 +106,7 @@ library(dygraphs)
 ```
 
 
-## download R
+## Download R
 
 CRAN- The Comprehensive R Archive Network: 
 https://cran.r-project.org/
@@ -117,7 +117,7 @@ https://cran.r-project.org/
 
 ![](1.1.6.png)
 
-##  base installiation
+##  Base Installiation
 
 Base installation: base, datasets, utils, grDevices, graphics, stats,  methods ... Packages
 
@@ -136,18 +136,18 @@ https://cran.r-project.org/  >  Task Views
 
 ![](1.1.3.png)
 
-## cran packages
+## CRAN Packages
 https://cran.r-project.org/  > Packages
 
 ![](1.1.4.png)
 
 R Home Page : https://www.r-project.org/ > Bioconductor
 
-## package web page
+## Package Web Page
 
 ![](1.1.5.png)
 
-## package information
+## Package Information
 
 **Version :**
 
@@ -165,8 +165,7 @@ R Home Page : https://www.r-project.org/ > Bioconductor
 
 **Source :**
 
-## inside packages {.tabset .tabset-fade .tabset-pills}
-
+## Inside Packages {.tabset .tabset-fade .tabset-pills}
 
 ### **Data**
 ```{r}
@@ -182,18 +181,18 @@ sum(mtcars$mpg)
 ??sum # fuzzy search for help
 ```
 
-###**examples**
+###**Examples**
 ```{r}
 example(mtcars)
 ```
 
-###**demonstrations**
+###**Demonstrations**
 ```{r,eval=FALSE}
 demo() # list of demos of installed packages
 demo(graphics)
 ```
 
-###**vignettes**
+###**Vignettes**
 ```{r}
 vignette() # list of vignettes of installed packages
 ```
@@ -203,7 +202,7 @@ vignette() # list of vignettes of installed packages
 library(Rcmdr) # Statistics  GUI
 ```
 
-###**fun :)**
+###**Fun :)**
 ```{r,eval=FALSE}
 library(RXKCD)
 searchXKCD("programing ")
@@ -247,9 +246,9 @@ Rcade::games$Pacman
 Rcade::games$`2048`
 ```
 
+[More R Games:](https://lucidmanager.org/tags/r-games/)
 
-
-# other package sources:
+# Other Package Sources:
 help                                            | Link
 -------------                                   | -------------
 Microsoft R Open:latest packages                | https://mran.microsoft.com/spotlight/
@@ -264,7 +263,7 @@ BIOCONDUCTOR                                    |  https://www.bioconductor.org/
 RSTUDIO                                         | https://rviews.rstudio.com/
 
 
-# for help
+# For Help
 help            | Link
 -------------   | -------------
 email lists     | https://www.r-project.org/mail.html
@@ -416,7 +415,7 @@ update.packages()
 14/(5+3)
 ```
 
-#   Named storage 
+#   Named Storage 
 ## variable names
 In R, an object is anything that can be assigned to a variable. 
 This includes constants, data structures, functions, and even graphs. Objects have a mode (which describes how the object is stored) and a class (which tells generic functions like print how to handle it).
@@ -459,7 +458,9 @@ Var_name% : Invalid - Contains the percentage (%) sign.
  _var_name : Invalid - Starts with an underscore.
 
 
-# objects
+# Objects
+
+In every computer language variables provide a means of accessing the data stored in memory. R does not provide direct access to the computer’s memory but rather provides a number of specialized data structures we will refer to as objects. These objects are referred to through symbols or variables. In R, however, the symbols are themselves objects and can be manipulated in the same way as any other object. This is different from many other languages and has wide ranging effects.
 
 ```{r}
 ob1 <- 54 
@@ -473,7 +474,7 @@ ob8 <- 54L
 ```
 
 
-# function for objects
+# Function for objects
 ```{r}
 ob1 # print object to screen
 print(ob1)
@@ -502,18 +503,48 @@ ls()
 ```
 
 
-Object         | class()      |  mode()     |  typeof()
----------------|--------------|-------------|----------
-ob1<-54        | numeric      | numeric     | double
-ob2<-"merhaba" | character    | character   | character
-ob3<-'F'       | character    | character   | character
-ob4<-TRUE      | logical      | logical     | logical
-ob5<-F         | logical      | logical     | logical
-ob6<-c(1,4,5)  | numeric      | numeric     | double
-ob7<-mtcars    | data.frame   | list        | list
-ob8<-54L       | data.frame   | list        | list
+Object         | `class()`    |  `mode()`   |  `typeof()` | `storage.mode()`
+---------------|--------------|-------------|-------------|---------------
+ob1<-54        | numeric      | numeric     | double      | double
+ob2<-"merhaba" | character    | character   | character   | character
+ob3<-'F'       | character    | character   | character   | character
+ob4<-TRUE      | logical      | logical     | logical     | logical
+ob5<-F         | logical      | logical     | logical     | logical
+ob6<-c(1,4,5)  | numeric      | numeric     | double      | double
+ob7<-mtcars    | data.frame   | list        | list        | list
+ob8<-54L       | integer      | numeric     | integer     | integer
+
+[Objects in R](https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects)
 
 
+The following table describes the possible values returned by typeof and what they are.
+
+`typeof()`     | definition
+---------------|-----------------
+"NULL"	       | NULL
+"symbol"       | a variable name
+"pairlist"     | a pairlist object (mainly internal)
+"closure"	     | a function
+"environment"  | an environment
+"promise"	     | an object used to implement lazy evaluation
+"language"	   | an R language construct
+"special"	     | an internal function that does not evaluate its arguments
+"builtin"	     | an internal function that evaluates its arguments
+"char"	       | a ‘scalar’ string object (internal only) ***
+"logical"	     | a vector containing logical values
+"integer"	     | a vector containing integer values
+"double"	     | a vector containing real values
+"complex"	     | a vector containing complex values
+"character"    | a vector containing character values
+"..."	         | the special variable length argument ***
+"any"	         | a special type that matches all types: there are no objects of this type
+"expression"	 | an expression object
+"list"         | a list
+"bytecode"	   | byte code (internal only) ***
+"externalptr"  | an external pointer object
+"weakref"	     | a weak reference object
+"raw"	         | a vector containing bytes
+"S4"	         | an S4 object which is not a simple object
 
 # Operators
 ## 1. Assignment Operators 
