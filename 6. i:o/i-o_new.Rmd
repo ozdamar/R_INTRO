@@ -1,0 +1,64 @@
+---
+title: "Import Data"
+author: "ozge.ozdamar@msgsu.edu.tr"
+output: 
+ html_document:
+    df_print: paged
+    # theme: sandstone
+    # default, cerulean, journal, flatly, darkly, readable, spacelab, united, cosmo, lumen, paper, sandstone, simplex, and yeti.
+    # highlight: haddock
+    # default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    header-includes:
+       - \usepackage{color}
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+    #code_folding: hide
+---
+
+
+
+**packages**
+```{r,eval=FALSE}
+.packages = c("gdata","foreign","XLConnect","WriteXLS","rjson","readr","readxl","haven",
+              "xml2","rvest","jsonlite","DBI")
+.inst <- .packages %in% installed.packages()
+if(length(.packages[!.inst]) > 0) install.packages(.packages[!.inst])
+lapply(.packages, require, character.only=TRUE)
+
+```
+
+**functions**
+```{r,eval=FALSE}
+utils::read.table(),read.csv(),read.csv2(),read.delim(),read.delim2()
+readr::read_delim(),read_delim_chunked(),read_csv(),read_csv2_chunked(),read_csv2(),read_csv2_chunked(),read_tsv(),read_tsv_chunked()
+read.tabe::
+
+```
+
+***
+
+# Flat files 
+
+```{r,eval=FALSE}
+read.csv(file, header = TRUE, sep = ",", quote = "\"",
+         dec = ".", fill = TRUE, comment.char = "", ...)
+
+```
+
+csv :comma-separated values
+
+```{r}
+data1 <- read.csv("Water_Right_Applications.csv", stringsAsFactors=FALSE, header=TRUE)
+head(data1)
+```
+
+
+```{r}
+data2 <- readr::read_csv("Water_Right_Applications.csv")
+head(data2)
+```
+
+
+
